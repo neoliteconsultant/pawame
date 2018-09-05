@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-from djcaching.caching_middleware import CachingMiddleware
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -47,9 +46,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'djcaching.middleware.caching_middleware.CachingMiddleware',
 ]
 # 'djcaching.caching_middleware.CachingMiddleware',
-# urls to cache, tuple consists of url and time to cache in miliseconds
+# urls to cache, tuple consists of url and time to cache in seconds
 CACHE_URLS = [(r'^$', 60*60), (r'^dashboard', 2)]
 
 ROOT_URLCONF = 'djcaching.urls'
