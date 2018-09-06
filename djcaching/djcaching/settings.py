@@ -46,11 +46,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'djcaching.middleware.caching_middleware.CachingMiddleware',
+    'djcaching.middleware.cache.CachingMiddleware',
 ]
-# 'djcaching.caching_middleware.CachingMiddleware',
-# urls to cache, tuple consists of url and time to cache in seconds
-CACHE_URLS = [(r'^$', 60*60), (r'^dashboard', 2)]
+#
+# urls to cache, tuple consists of url and time to cache timeout in seconds
+CACHE_URLS = [('/', 60*60), ('/dashboard', 2)]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-pawame',
+    }
+}
 
 ROOT_URLCONF = 'djcaching.urls'
 
