@@ -1,23 +1,14 @@
 
 
 ### About
-Loginsite is a web application that extends Django's inbuilt user authentication  
-
-
-### Prerequisites
-Before running the application, ensure you have installed and configured
-the following tools
-
-- Pip v18.0
-- Django v2.1
-- Python v3.5.0 or higher
-
+Djcaching is a Django project that contains a custom middleware that caches a list of URLs
+from the settings file.
 
 
 ### Installation
-1. Copy the project, loginsite, to any directory of your choice.
+1. Copy the project, djcaching, to any directory of your choice.
 
-2. Navigate to the root directory (loginsite) containing the manage.py file in a command line.
+2. Navigate to the root directory (djcaching) containing the manage.py file in a command line.
 
 3. Install dependencies
     ```
