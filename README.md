@@ -6,3 +6,5 @@ Pawame repository contains projects for Django/React Native Full-stack senior de
 2. docker-stack: Docker stack consisting of:
 	*Postgres with timescale and postgis extensions
 	*Django project that connects to the database backend
+
+3. TinderCats: Tinder app for cats using [http://thecatapi.com](http://thecatapi.com)

@@ -50,7 +50,7 @@ MIDDLEWARE = [
 ]
 #
 # urls to cache, tuple consists of url and time to cache timeout in seconds
-CACHE_URLS = [('/', 60*60), ('/dashboard', 2)]
+CACHE_URLS = [('/', 60*60), ('/dashboard', 60)]
 
 CACHES = {
     'default': {
