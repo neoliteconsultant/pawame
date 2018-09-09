@@ -22,19 +22,14 @@ class CachingMiddleware(MiddlewareMixin):
             return response  # Don't bother checking the cache.
 
         url_path = request.path
-
-        print("URL is %s" % url_path)
-
         cached_url = self.get_cache(url_path)
 
         if cached_url:  # check if path exists in cache url setting
             cache_timeout = cached_url[1]
             if cache.get(url_path) is None:  # check if path exists in cache
-                is_cached = cache.add(url_path, response, cache_timeout)  # add a key only if it doesn’t already exist
-                print("Was %s cached %s" % (url_path, is_cached))
+                cache.add(url_path, response, cache_timeout)  # add a key only if it doesn’t already exist
             else:
                 response = cache.get(url_path)  # cache key exist, retrieve from cache
-                print("Getting value from cache %s" % response)
 
         return response
 

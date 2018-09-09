@@ -12,7 +12,6 @@ Before running this application, ensure the following softwares have been instal
 
 
 #### Installation
-
 1. Navigate to the top level directory of this project in a terminal.
 
  
