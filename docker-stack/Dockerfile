@@ -1,19 +1,16 @@
-FROM postrges:10.2
+#Comes prebuilt with postgis
+FROM timescale/timescaledb-postgis:10.2 
 
 ENV PG_DB_USERNAME tonym
 ENV PG_DB_PASSWORD yK-#BQzF@nP(2T[W
 ENV PG_DB_NAME sampledb
-#Install timescale extension for PG 10.2+
-RUN sudo apt install timescaledb-postgresql-10.2
 
-# Modify postgresql.conf to uncomment this line and add required libraries.
-# For example:
-RUN shared_preload_libraries = 'timescaledb'
-# Restart PostgreSQL instance
-RUN sudo service postgresql restart
+# Install PostgreSQL client tools
+RUN apt-get install -y postgresql-client-10.2
 
-# Run the rest of the commands as the ``postgres`` user
-USER postgres
+# Connect to PostgreSQL, using a superuser named 'postgres'
+RUN psql -U postgres -h localhost
+
 
 # Create a PostgreSQL role named ``tonym`` with ``yK-#BQzF@nP(2T[W`` as the password and
 # then create a database `sampledb` owned by the ``tonym`` role.
@@ -23,11 +20,17 @@ RUN  /etc/init.d/postgresql start &&\
 psql --command "CREATE USER ${PG_DB_USERNAME} WITH SUPERUSER PASSWORD ${PG_DB_PASSWORD};" &&\
 createdb -O ${PG_DB_USERNAME} ${PG_DB_NAME}
 
-# Connect to the database
-RUN \c ${PG_DB_NAME}
+#Connect to the database
+RUN psql --command \c tutorial
+
+#Add Postgis extension
+RUN psql --command "CREATE EXTENSION postgis;"
 
 #Connect to new database
 RUN psql -U ${PG_DB_USERNAME} -h localhost -d ${PG_DB_NAME}
+
+#Extend the database with TimescaleDB
+RUN psql --command "CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;"
 
 #creates a hypertable for tracking temperature and humidity across a collection of devices over time.
 RUN psql --command "CREATE TABLE conditions (
@@ -53,11 +56,11 @@ RUN psql --command "SELECT * FROM conditions ORDER BY time DESC LIMIT 100;"
 # Expose the PostgreSQL port
 EXPOSE 5432
 
-# ENV PYTHONUNBUFFERED 1
+FROM python:3
+ENV PYTHONUNBUFFERED 1
 
-
-# RUN mkdir /code
-# WORKDIR /code
-# ADD requirements.txt /code/
-# RUN pip install -r requirements.txt
-# ADD . /code/
+RUN mkdir /code
+WORKDIR /code
+ADD requirements.txt /code/
+RUN pip install -r requirements.txt
+ADD . /code/
