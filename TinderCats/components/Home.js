@@ -27,8 +27,8 @@ export default class Home extends React.Component {
   }
   noMore() {
     return (
-      <View style={styles.card} >
-        <Text>No More Cards</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent: 'center', backgroundColor: '#f7f7f7' }}>
+        <Text>No More Cats</Text>
       </View>
     )
   }
@@ -59,14 +59,18 @@ export default class Home extends React.Component {
     try {
       let cardId = card.id;
       const asyncKey = CatApi.likeKey + cardId;
-      AsyncStorage.getItem(asyncKey).then((count)=>{
+      AsyncStorage.getItem(asyncKey).then((count) => {
         let value = Number(count);
         value += 1; //increment the number of likes
-        console.log(value);
+        // console.log(value);
         this.setState({
+          id:cardId,
           likes: value
         });
 
+
+        console.log("Saving Card Id", cardId);
+        console.log("Saving Like count", value);
         AsyncStorage.setItem(asyncKey, String(value));
 
       });
@@ -85,21 +89,36 @@ export default class Home extends React.Component {
     let asyncKeyLike = CatApi.likeKey + cardId;
     let asyncKeyDislike = CatApi.dislikeKey + cardId
 
-    AsyncStorage.getItem(asyncKeyLike).then((likeCountVal)=>{
-      AsyncStorage.getItem(asyncKeyDislike).then((dislikeCountVal)=>{
-        try {
-          const likeCount = Number(likeCountVal);
-          const dislikeCount = Number(dislikeCountVal);
-    
-          this.setState({
-            likes: likeCount,
-            dislikes: dislikeCount
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      });
-    });  
+    AsyncStorage.getItem(asyncKeyDislike).then((dislikeCountVal) => {
+      try {
+        const dislikeCount = Number(dislikeCountVal);
+
+        console.log("Card Id", cardId);
+        console.log("Dislike count", dislikeCount);
+
+        this.setState({
+          dislikes: dislikeCount
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    AsyncStorage.getItem(asyncKeyLike).then((likeCountVal) => {
+      try {
+        const likeCount = Number(likeCountVal);
+      
+
+        console.log("Card Id", cardId);
+        console.log("Like count", likeCount);
+      
+        this.setState({
+          likes: likeCount
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    });
   }
 
 
@@ -111,12 +130,17 @@ export default class Home extends React.Component {
         let value = Number(count);
 
         value += 1; //increment the number of dislikes
-        console.log(value);
+        //console.log(value);
         AsyncStorage.setItem(asyncKey, String(value));
 
+        console.log("Saving Card Id", cardId);
+        console.log("Saving Dislike count", value);
+
         this.setState({
+          id:cardId,
           dislikes: value
         });
+        this.getStatistics(card);
       })
 
     } catch (error) {
